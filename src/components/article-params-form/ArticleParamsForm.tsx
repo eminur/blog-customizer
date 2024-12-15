@@ -64,13 +64,13 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	};
 
 	useEffect(() => {
+		if (!isMenuOpen) return;
+
 		const onClickHandler = (e: MouseEvent) => {
 			if (ref.current && !ref.current.contains(e.target as Node)) {
 				setIsMenuOpen(false);
 			}
 		};
-
-		if (!isMenuOpen) return;
 
 		document.addEventListener('mousedown', onClickHandler);
 
