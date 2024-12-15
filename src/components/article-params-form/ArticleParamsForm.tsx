@@ -27,7 +27,7 @@ type ArticleParamsFormProps = {
 
 export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	const ref = useRef<HTMLFormElement | null>(null);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [fontFamily, setFontFamily] = useState<OptionType>(
 		props.articleState.fontFamilyOption
 	);
@@ -66,28 +66,35 @@ export const ArticleParamsForm = (props: ArticleParamsFormProps) => {
 	useEffect(() => {
 		const onClickHandler = (e: MouseEvent) => {
 			if (ref.current && !ref.current.contains(e.target as Node)) {
-				setIsOpen(false);
+				setIsMenuOpen(false);
 			}
 		};
+
+		if (!isMenuOpen) return;
 
 		document.addEventListener('mousedown', onClickHandler);
 
 		return () => {
 			document.removeEventListener('mousedown', onClickHandler);
 		};
-	}, []);
+	}, [isMenuOpen]);
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+			<ArrowButton
+				isOpen={isMenuOpen}
+				onClick={() => setIsMenuOpen(!isMenuOpen)}
+			/>
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isMenuOpen,
+				})}>
 				<form
 					className={styles.form}
 					onReset={resetHandler}
 					onSubmit={submitHandler}
 					ref={ref}>
-					<Text size={31} weight={800} uppercase>
+					<Text as='h1' size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
 					<Select
